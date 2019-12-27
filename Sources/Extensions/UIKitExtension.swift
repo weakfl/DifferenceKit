@@ -148,7 +148,12 @@ public extension UICollectionView {
         }
 
         for changeset in stagedChangeset {
-            if let interrupt = interrupt, interrupt(changeset), let data = stagedChangeset.last?.data {
+            if #available(iOS 12.0, *) {
+                if let interrupt = interrupt, interrupt(changeset), let data = stagedChangeset.last?.data {
+                    setData(data)
+                    return reloadData()
+                }
+            } else if let data = stagedChangeset.last?.data {
                 setData(data)
                 return reloadData()
             }
